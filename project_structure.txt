@@ -1,0 +1,31 @@
+/Frontend_Dashboard_React
+|-- /public
+|   |-- favicon.ico
+|   |-- /images
+|-- /src
+|   |-- /app
+|   |   |-- /page.js            # Root page (index.js)
+|   |   |-- /layout.js           # Root layout for the entire app
+|   |   |-- /(dashboard)
+|   |   |   |--/(auth)
+|   |   |   |   |--/login
+|   |   |   |   |  |-- page.jsx
+|   |   |   |   |--/register
+|   |   |   |   |  |-- page.jsx
+|    |   |   |-- /blog                # Blog route folder
+|    |   |   |   |-- page.js          # Blog page
+|    |   |   |   |-- /[slug]           # Dynamic route for individual posts
+|    |   |   |   |   |-- page.js
+|   |   |-- /components          # Shared components (Header, Footer, etc.)
+|   |-- /styles
+|   |   |-- globals.css
+|   |   |-- Home.module.css
+|   |-- /lib
+|   |   |-- /db.js               # Database configuration or utility files
+|-- next.config.js
+|-- package.json
+|-- .gitignore
+|-- README.md
+
+
+

@@ -1,7 +1,48 @@
+'use client';
+
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
+import { postData } from '../../../../lib/axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 const LoginPage = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await postData('/auth/login/', { email, password });
+      console.log('Login successful:', response);
+
+      // Save token to localStorage (or any other storage mechanism)
+      if (response.results.token) {
+        toast.success('Login successful!');
+        localStorage.setItem('authToken', response.results.token);
+
+        // Redirect to the dashboard or another page
+        // window.location.href = '/dashboard';
+      } else {
+        throw new Error('Token not provided in response');
+      }
+    } catch (err) {
+      const errorMessage = err.response?.data?.errors?.message || 'Something went wrong';
+      toast.error(errorMessage);
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-8">
@@ -69,7 +110,7 @@ const LoginPage = () => {
         </div>
 
         {/* Login Form */}
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           {/* Email */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -79,6 +120,8 @@ const LoginPage = () => {
               type="email"
               id="email"
               name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
               placeholder="example@example.com"
               required
@@ -86,27 +129,41 @@ const LoginPage = () => {
           </div>
 
           {/* Password */}
-          <div>
+          <div className="relative">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Password
             </label>
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               id="password"
-              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
               placeholder="••••••••"
               required
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 mt-5"
+            >
+              {showPassword ? '🙈' : '👁️'}
+            </button>
           </div>
+
+          {/* Error Message */}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+
 
           {/* Submit Button */}
           <div>
             <button
               type="submit"
-              className="w-full py-2 px-4 text-white bg-blue-500 hover:bg-blue-600 rounded-lg shadow-lg focus:ring focus:ring-blue-300 focus:outline-none"
+              disabled={loading}
+              className={`w-full py-2 px-4 text-white bg-blue-500 hover:bg-blue-600 rounded-lg shadow-lg focus:ring focus:ring-blue-300 focus:outline-none ${loading ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
             >
-              Log In
+              {loading ? 'Logging in...' : 'Log In'}
             </button>
           </div>
         </form>
