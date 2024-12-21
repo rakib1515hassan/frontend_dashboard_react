@@ -6,9 +6,15 @@
 or, 
 >> yarn add axios
 
-# Step 2:
-# Step 2:
-# Step 2:
+# Step 3: Google Auth
+>> 
+
+# Step 4: Facebook Auth
+>> npm install react-facebook-login --legacy-peer-deps
+
+# Step 5: React Icon Add
+>> npm install react-icons --legacy-peer-deps
+
 # Step 2:
 # Step 2:
 # Step 2:
