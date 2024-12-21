@@ -3,6 +3,8 @@ import "./styles/globals.css";
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Import the toastify styles
+import Footer from "@/components/layout/footer";
+import Navbar from "@/components/layout/navbar";
 
 
 
@@ -28,7 +30,17 @@ export default function RootLayout({ children }) {
          <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
          >
+            {/* Navbar */}
+            <Navbar />  
+
+
+            {/* Main Content */}
             {children}
+
+
+            {/* Footer */}
+            <Footer />
+
 
             {/* For  Toast Message */}
             <ToastContainer />
