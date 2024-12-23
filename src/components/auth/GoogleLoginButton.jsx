@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 const GoogleLoginButton = ({ onSuccess }) => {
     const handleGoogleLoginSuccess = async (response) => {
         const { credential } = response;
+        console.log("Google Tocken =", response.credential);
 
         try {
             const res = await postData('/auth/google', { token: credential });
@@ -28,8 +29,12 @@ const GoogleLoginButton = ({ onSuccess }) => {
         toast.error('Google login failed: ' + error);
     };
 
+    const google_client_id = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
+    // console.log("Google Client Id =", google_client_id);
+
     return (
-        <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+
+        <GoogleOAuthProvider clientId={google_client_id}>
             <GoogleLogin
                 onSuccess={handleGoogleLoginSuccess}
                 onError={handleGoogleLoginFailure}
