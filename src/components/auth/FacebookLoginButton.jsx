@@ -9,11 +9,13 @@ import { postData } from '@/lib/axios';
 import { toast } from 'react-toastify';
 
 const FacebookLoginButton = ({ onSuccess }) => {
+    const facebook_app_id = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID
+
     const handleFacebookLogin = async (response) => {
-        console.log('Facebook login response:', response);
+        // console.log('Facebook login response:', response);
 
         try {
-            const res = await postData('/auth/facebook', { accessToken: response.accessToken });
+            const res = await postData('/auth/facebook', { token: response.accessToken });
             console.log('Facebook login successful:', res);
 
             if (res.results.token) {
@@ -28,7 +30,7 @@ const FacebookLoginButton = ({ onSuccess }) => {
 
     return (
         <FacebookLogin
-            appId="YOUR_FACEBOOK_APP_ID"
+            appId={facebook_app_id}
             fields="name,email,picture"
             callback={handleFacebookLogin}
             cssClass="w-full flex items-center justify-center py-2 px-4 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 focus:outline-none mt-2"
