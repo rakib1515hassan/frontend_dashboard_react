@@ -1,113 +1,165 @@
-'use client'
+"use client";
+
 import { useState } from "react";
+import Link from "next/link";
+import { FaSearch, FaShoppingBasket, FaBars, FaTimes } from "react-icons/fa";
 
 export default function Navbar() {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [isDarkMode, setIsDarkMode] = useState(false); // State to toggle dark mode
+  const [currency, setCurrency] = useState("USD $");
+  const [language, setLanguage] = useState("English");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-    // Toggle the dropdown visibility
-    const toggleDropdown = () => {
-        setIsDropdownOpen((prevState) => !prevState);
-    };
+  return (
+    <header className="w-full shadow-md">
+      {/* Top Bar */}
+      <div className="bg-gray-100 text-center text-xs sm:text-sm py-1">
+        Order Before 17:30, Shipped Today
+      </div>
 
-    // Toggle dark mode
-    const toggleDarkMode = () => {
-        setIsDarkMode((prevState) => !prevState);
-        document.documentElement.classList.toggle('dark', !isDarkMode); // Toggle dark mode class
-    };
+      {/* Main Navbar */}
+      <div className="bg-white flex justify-between items-center px-4 sm:px-6 py-3">
+        {/* Logo */}
+        <Link href="/">
+          <div className="text-xl sm:text-2xl font-bold text-pink-600 flex items-center">
+            <span className="mr-2">⚡</span> Techayo{" "}
+            <span className="text-gray-500 text-xs sm:text-sm ml-1">Electronic</span>
+          </div>
+        </Link>
 
-    return (
-        <nav className={`bg-white border-gray-200 dark:bg-gray-900 ${isDarkMode ? "dark" : ""}`}>
-            <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                {/* Logo Section */}
-                <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-                    <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
-                    <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
-                </a>
+        {/* Search Bar - Hidden on small screens */}
+        <div className="hidden md:flex border rounded-md overflow-hidden w-1/3">
+          <input
+            type="text"
+            placeholder="Search"
+            className="w-full p-2 outline-none"
+          />
+          <button className="bg-pink-600 text-white p-2">
+            <FaSearch />
+          </button>
+        </div>
 
-                {/* Dark Mode Toggle Button */}
-                <button
-                    onClick={toggleDarkMode}
-                    className="p-2 text-gray-500 rounded-lg md:hidden dark:text-white">
-                    {isDarkMode ? "Light Mode" : "Dark Mode"}
-                </button>
+        {/* Account & Cart */}
+        <div className="hidden md:flex items-center space-x-4 text-gray-700">
+          <span className="cursor-pointer">Wishlist</span>
+          <span className="cursor-pointer">
+            <Link href="/login">Account</Link>
+          </span>
+          <select
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value)}
+            className="bg-transparent cursor-pointer"
+          >
+            <option>USD $</option>
+            <option>EUR €</option>
+            <option>GBP £</option>
+          </select>
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            className="bg-transparent cursor-pointer"
+          >
+            <option>English</option>
+            <option>French</option>
+            <option>Spanish</option>
+          </select>
+          <div className="flex items-center cursor-pointer">
+            <FaShoppingBasket size={20} />
+            <span className="ml-1">$0.00</span>
+          </div>
+        </div>
 
-                {/* Navbar Menu */}
-                <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                    {/* User Menu Button */}
-                    <button
-                        type="button"
-                        className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                        onClick={toggleDropdown}
-                    >
-                        <span className="sr-only">Open user menu</span>
-                        <img className="w-8 h-8 rounded-full" src="icon/profile.jpg" alt="user photo" />
-                    </button>
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden text-gray-700 text-xl"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          {mobileMenuOpen ? <FaTimes /> : <FaBars />}
+        </button>
+      </div>
 
-                    {/* Dropdown menu */}
-                    <div
-                        className={`z-50 mt-10 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 ${isDropdownOpen ? "block" : "hidden"}`}
-                        id="user-dropdown"
-                    >
-                        <div className="px-4 py-3">
-                            <span className="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
-                            <span className="block text-sm text-gray-500 truncate dark:text-gray-400">name@flowbite.com</span>
-                        </div>
-                        <ul className="py-2" aria-labelledby="user-menu-button">
-                            <li><a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Dashboard</a></li>
-                            <li><a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Settings</a></li>
-                            <li><a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Earnings</a></li>
-                            {/* <li><a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a></li> */}
-                            <li><a href="/login" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Login</a></li>
-                        </ul>
-                    </div>
+      {/* Mobile Dropdown Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-white absolute w-full top-16 left-0 shadow-md border-t">
+          <ul className="flex flex-col text-gray-700 py-2 px-4">
+            <li className="py-2 border-b">
+              <Link href="/login">Account</Link>
+            </li>
+            <li className="py-2 border-b">Wishlist</li>
+            <li className="py-2 border-b">Shop</li>
+            <li className="py-2 border-b">Contact</li>
+            <li className="py-2 border-b">Services</li>
+            <li className="py-2">
+              <select
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)}
+                className="w-full bg-transparent cursor-pointer"
+              >
+                <option>USD $</option>
+                <option>EUR €</option>
+                <option>GBP £</option>
+              </select>
+            </li>
+            <li className="py-2">
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="w-full bg-transparent cursor-pointer"
+              >
+                <option>English</option>
+                <option>French</option>
+                <option>Spanish</option>
+              </select>
+            </li>
+          </ul>
+        </div>
+      )}
 
-                    {/* Hamburger Menu */}
-                    <button
-                        data-collapse-toggle="navbar-user"
-                        type="button"
-                        className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                        aria-controls="navbar-user"
-                        aria-expanded="false"
-                    >
-                        <span className="sr-only">Open main menu</span>
-                        <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
-                        </svg>
-                    </button>
-                </div>
+      {/* Navigation Bar */}
+      <nav className="bg-black text-white flex justify-between px-4 sm:px-6 py-2 items-center relative">
+        <button
+          className="bg-yellow-400 text-black px-4 py-2 font-semibold rounded flex items-center"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <FaBars className="mr-2" /> ALL CATEGORIES
+        </button>
 
-                {/* Navbar Links for Large Screens */}
-                <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
-                    <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                        <li>
-                            <a href="#" className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500">
-                                Home
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white">
-                                About
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white">
-                                Services
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white">
-                                Pricing
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white">
-                                Contact
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    );
+        <div className="hidden md:flex space-x-6 text-sm">
+          <a href="#" className="hover:text-yellow-400">About us</a>
+          <a href="#" className="hover:text-yellow-400">Collection</a>
+          <a href="#" className="hover:text-yellow-400">Contact</a>
+          <a href="#" className="hover:text-yellow-400">Blog</a>
+          <a href="#" className="hover:text-yellow-400">Shop</a>
+          <a href="#" className="hover:text-yellow-400">Services</a>
+          <a href="#" className="hover:text-yellow-400">View More ▼</a>
+        </div>
+
+        <button className="hidden md:block bg-yellow-400 text-black px-4 py-2 font-semibold rounded">
+          FLAT 10% OFF ALL PURCHASE
+        </button>
+      </nav>
+
+      {/* Dropdown Menu */}
+      {menuOpen && (
+        <div className="absolute bg-white w-64 shadow-md left-4 sm:left-6 top-20 z-10 border rounded-md">
+          <ul className="py-2">
+            <li className="px-4 py-2 flex justify-between border-b">
+              Electronic{" "}
+              <span className="bg-black text-white text-xs px-2 py-1 rounded">NEW</span>
+            </li>
+            <li className="px-4 py-2 border-b">Blogs</li>
+            <li className="px-4 py-2 flex justify-between border-b">
+              Accessories{" "}
+              <span className="bg-green-500 text-white text-xs px-2 py-1 rounded">SALE</span>
+            </li>
+            <li className="px-4 py-2 border-b">Collection</li>
+            <li className="px-4 py-2 border-b">Contact</li>
+            <li className="px-4 py-2 border-b">Included Pages</li>
+            <li className="px-4 py-2 border-b">About Us</li>
+            <li className="px-4 py-2">FAQs</li>
+          </ul>
+        </div>
+      )}
+    </header>
+  );
 }

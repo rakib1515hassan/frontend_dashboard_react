@@ -13,6 +13,7 @@ const FacebookLoginButton = ({ onSuccess }) => {
 
     const handleFacebookLogin = async (response) => {
         // console.log('Facebook login response:', response);
+        console.log('Facebook login response:', response.accessToken);
 
         try {
             const res = await postData('/auth/facebook', { token: response.accessToken });
